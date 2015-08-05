@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="./spotistyle.css"> 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<title>Spotify</title>
+</head>
+<body>
+	<form>
+		<input type="text" class="artist" placeholder="Search artist, song...">
+		<button class="btn btn-danger" id="js-submit" type="submit">Search</button>
+	</form>
+	
+	<div id="artists_list">
+	</div>
+
+	<script type="text/javascript">
+		var div = document.getElementById("artists_list");
+
+
+		$('#js-submit').on('click', function(event) {
+			event.preventDefault();
+			$.ajax({
+				url: 'https://api.spotify.com/v1/search?type=artist&query=' + $('.artist').val(),
+				data: '',
+				success: function(artist) {
+					console.log('Success!!');
+					list_of_artists_names(artist);						
+				},
+				error: function() {
+					console.log("You didn't get the artist");
+				},
+				dataType: 'json'
+			});
+		});
+
+		var list_of_artists_names = function (artist) {
+			var i = 0;
+			while( i < artist.artists.items.length) {
+				 $('#artists_list').append(artist.artists.items[i].name + '<br>');
+				 $('#artists_list').append("<img src='" + artist.artists.items[i].images[0].url + "'>" + '<br>');
+				 i++;
+			}
+		}
+
+
+	</script>
+</body>
+</html>
